@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,7 +49,7 @@ class XmlPostDownloader implements PostDownloader {
             });
         } catch (HttpClientErrorException.NotFound clientError) {
             throw new XmlFileNotFoundException();
-        } catch (RestClientResponseException serverError) {
+        } catch (RestClientResponseException | ResourceAccessException serverError) {
             LOGGER.warn(format("File %s unavailable", fileUri), serverError);
             throw new FileUnavailableException();
         }
