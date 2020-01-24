@@ -1,0 +1,36 @@
+# Files #
+*.class
+*.project
+*.classpath
+*.jsfdia
+*.spdia
+*.pmd
+*jboss-ds.xml
+*nb-configuration.xml
+*jboss4-netbeans-destinations-service.xml
+*nbactions.xml
+*.idea
+*.iml
+*.tern-project
+qualirede-model/src/main/resources/maven.properties
+.factorypath
+.externalToolBuilders/*
+.checkstyle
+.metadata
+/.fbIncludeFilterFile
+/.pmdruleset.xml
+/.ruleset
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Folders #
+target/
+.settings/
+classes/
+.idea/
+/.apt_generated
+/bin
+/target/
