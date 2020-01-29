@@ -17,6 +17,7 @@ import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.UUID;
@@ -44,7 +45,10 @@ class XmlPostDownloader implements PostDownloader {
                 request.getHeaders().add(HttpHeaders.ACCEPT, MediaType.APPLICATION_XML_VALUE);
             }, response -> {
                 final Path ret = Path.of(tempDirectory, UUID.randomUUID().toString());
-                StreamUtils.copy(response.getBody(), new FileOutputStream(ret.toFile()));
+                try (final InputStream input = response.getBody();
+                     final FileOutputStream output = new FileOutputStream(ret.toFile())) {
+                    StreamUtils.copy(input, output);
+                }
                 return ret;
             });
         } catch (HttpClientErrorException.NotFound clientError) {

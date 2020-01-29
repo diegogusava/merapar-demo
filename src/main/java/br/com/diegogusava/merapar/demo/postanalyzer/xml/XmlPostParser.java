@@ -17,6 +17,7 @@ import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 
@@ -37,9 +38,9 @@ class XmlPostParser implements PostParser {
     }
 
     private void readContent(final AnalysisDetails details, final Path xmlPath) {
-        try {
+        try (var inputStream = new FileInputStream(xmlPath.toFile())){
             final var xmlInputFactory = XMLInputFactory.newInstance();
-            final var reader = xmlInputFactory.createXMLEventReader(new FileInputStream(xmlPath.toFile()));
+            final var reader = xmlInputFactory.createXMLEventReader(inputStream);
             while (reader.hasNext()) {
                 processEvent(details, reader.nextEvent());
             }
@@ -49,6 +50,9 @@ class XmlPostParser implements PostParser {
             throw new ParserException();
         } catch (FileNotFoundException e) {
             LOGGER.error(format("Xml file %s not found", xmlPath), e);
+            throw new ParserException();
+        } catch (IOException e) {
+            LOGGER.error(format("Error reading XML file %s", xmlPath), e);
             throw new ParserException();
         }
     }
